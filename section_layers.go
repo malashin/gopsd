@@ -257,7 +257,7 @@ func readLayers(doc *Document) {
 	reader.Skip(int(length) - (reader.Position - pos))
 }
 
-func (l Layer) ToString() string {
+func (l Layer) String() string {
 	return fmt.Sprintf("%s: %s", l.Name, l.Rectangle.ToString())
 }
 
@@ -308,10 +308,12 @@ type Layer struct {
 	Children []*Layer
 }
 
+// IsText reports whether layer is a text layer.
 func (l *Layer) IsText() bool {
 	return l.ObsoleteTypeTool != nil || l.TypeTool != nil
 }
 
+// GetImage returns visual representation of the layer as an image.Image.
 func (l *Layer) GetImage() (image.Image, error) {
 	width := int(l.Rectangle.Width)
 	height := int(l.Rectangle.Height)
@@ -320,7 +322,7 @@ func (l *Layer) GetImage() (image.Image, error) {
 		return nil, nil
 	}
 
-	image := image.NewRGBA(image.Rect(0, 0, width, height))
+	image := image.NewNRGBA(image.Rect(0, 0, width, height))
 	switch len(l.Channels) {
 	case 3: // RGB
 		// [TODO]
@@ -333,19 +335,20 @@ func (l *Layer) GetImage() (image.Image, error) {
 				green := byte(c[2].Data[i])
 				blue := byte(c[3].Data[i])
 				alpha := byte(c[0].Data[i])
-				image.Set(x, y, color.RGBA{red, green, blue, alpha})
+				image.Set(x, y, color.NRGBA{red, green, blue, alpha})
 			}
 		}
 	}
 	return image, nil
 }
 
+// LayerVectorMask contains vector mask settings.
 type LayerVectorMask struct {
 	IsInverted, IsLinked, IsDisabled bool
 	Path                             *types.Path
 }
 
-// LayerChannel stores color data of channel.
+// LayerChannel stores color data of a channel.
 // Channel IDs:
 //		0 = red, 1 = green, 2 = blue;
 //		-1 = transparency mask

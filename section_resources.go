@@ -2,7 +2,6 @@ package gopsd
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"image/jpeg"
 
@@ -79,39 +78,48 @@ func ReadResourceAspectRatio(reader *util.Reader) *IRAspectRatio {
 func readResources(doc *Document) {
 	length := reader.ReadInt32()
 
-	doc.Resources = make(map[int16]interface{})
-	startPos := 0
+	// DEBUG
+	// fmt.Println(length)
+	// if length%2 != 0 {
+	// 	length++
+	// }
+	reader.Skip(length)
+	return
 
-	for startPos < int(length) {
-		pos := reader.Position
+	// doc.Resources = make(map[int16]interface{})
+	// startPos := 0
 
-		sign := reader.ReadString(4)
-		if sign != "8BIM" {
-			panic(fmt.Sprintf("Wrong signature of resource #%d!", len(doc.Resources)))
-		}
+	// for startPos < int(length) {
+	// 	pos := reader.Position
 
-		id := reader.ReadInt16()
-		// Resource name [CHECK]
-		reader.ReadPascalString()
+	// 	sign := reader.ReadString(4)
+	// 	if sign != "8BIM" {
+	// 		fmt.Printf("#%x\n", reader.Position) // DEBUG
+	// 		panic(fmt.Sprintf("Wrong signature of resource #%d!", len(doc.Resources)))
+	// 	}
 
-		size := reader.ReadInt32()
-		dataPos := reader.Position
+	// 	id := reader.ReadInt16()
+	// 	// Resource name [CHECK]
+	// 	reader.ReadPascalString()
 
-		switch id {
-		case 1033, 1036:
-			doc.Resources[id] = ReadResourceThumbnail(reader)
-		case 1083:
-			doc.Resources[id] = ReadResourcePrintStyle(reader)
-		case 1064:
-			doc.Resources[id] = ReadResourceAspectRatio(reader)
-		default:
-			doc.Resources[id] = nil
-		}
-		if size%2 != 0 {
-			size++
-		}
-		reader.Skip(int(size) - (reader.Position - dataPos))
+	// 	size := reader.ReadInt32()
+	// 	dataPos := reader.Position
 
-		startPos += reader.Position - pos
-	}
+	// 	switch id {
+	// 	case 1033, 1036:
+	// 		doc.Resources[id] = ReadResourceThumbnail(reader)
+	// 	case 1083:
+	// 		doc.Resources[id] = ReadResourcePrintStyle(reader)
+	// 	case 1064:
+	// 		doc.Resources[id] = ReadResourceAspectRatio(reader)
+	// 	default:
+	// 		doc.Resources[id] = nil
+	// 	}
+	// 	if size%2 != 0 {
+	// 		size++
+	// 	}
+	// 	reader.Skip(int(size) - (reader.Position - dataPos))
+
+	// 	startPos += reader.Position - pos
+	// }
 }
