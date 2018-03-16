@@ -1,6 +1,6 @@
 package types
 
-import "github.com/solovev/gopsd/util"
+import "github.com/malashin/gopsd/util"
 
 type Point struct {
 	RelativeX, RelativeY float32

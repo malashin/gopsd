@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/solovev/gopsd/util"
+	"github.com/malashin/gopsd/util"
 )
 
 type Rectangle struct {

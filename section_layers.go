@@ -6,8 +6,8 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/solovev/gopsd/types"
-	"github.com/solovev/gopsd/util"
+	"github.com/malashin/gopsd/types"
+	"github.com/malashin/gopsd/util"
 )
 
 func readLayers(doc *Document) {
@@ -116,6 +116,7 @@ func readLayers(doc *Document) {
 
 		// Additional information at the end of the layer
 		index := 0
+
 		for reader.Position < int(extraLength)+extraPos {
 			sign = reader.ReadString(4)
 			if sign != "8BIM" && sign != "8B64" {
@@ -218,6 +219,9 @@ func readLayers(doc *Document) {
 				vectorMask.IsDisabled = (flags & (1 << 2)) > 0
 				vectorMask.Path = types.ReadPath(doc.Width, doc.Height, reader.ReadBytes(dataLength-8))
 				layer.VectorMask = vectorMask
+			case "SoCo":
+				reader.Skip(4) // Version (= 16 for PS 6.0)
+				layer.SolidColor = types.NewDescriptor(reader)
 			default:
 				reader.Skip(dataLength)
 			}
@@ -292,6 +296,8 @@ type Layer struct {
 	IsFolder              bool         `json:"-"`
 	IsSectionDivider      bool         `json:"-"`
 	DataKeys              []string
+
+	SolidColor *types.Descriptor `json:"-"`
 
 	VectorMask       *LayerVectorMask  `json:"-"`
 	VectorOriginData *types.Descriptor `json:"-"`

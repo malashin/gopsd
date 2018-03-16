@@ -5,7 +5,7 @@ import (
 	"image/png"
 	"os"
 
-	"github.com/solovev/gopsd"
+	"github.com/malashin/gopsd"
 )
 
 func main() {

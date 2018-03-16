@@ -5,8 +5,8 @@ import (
 	"image"
 	"image/jpeg"
 
-	"github.com/solovev/gopsd/types"
-	"github.com/solovev/gopsd/util"
+	"github.com/malashin/gopsd/types"
+	"github.com/malashin/gopsd/util"
 )
 
 type IRThumbnail struct {

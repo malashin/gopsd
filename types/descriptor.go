@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/solovev/gopsd/util"
+	"github.com/malashin/gopsd/util"
 )
 
 type Descriptor struct {
@@ -366,7 +366,7 @@ func getTextDataValue(path, collectionName string, collection interface{}) (inte
 	}
 }
 
-func (d *Descriptor) ToString() string {
+func (d *Descriptor) String() string {
 	return d.string(0)
 }
 

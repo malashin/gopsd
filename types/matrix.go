@@ -1,6 +1,6 @@
 package types
 
-import "github.com/solovev/gopsd/util"
+import "github.com/malashin/gopsd/util"
 
 // Matrix stores information about 2d transformation
 //  XX - Horizontal scale
