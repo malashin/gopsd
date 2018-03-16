@@ -331,7 +331,17 @@ func (l *Layer) GetImage() (image.Image, error) {
 	image := image.NewNRGBA(image.Rect(0, 0, width, height))
 	switch len(l.Channels) {
 	case 3: // RGB
-		// [TODO]
+		c := l.Channels
+		for x := 0; x < width; x++ {
+			for y := 0; y < height; y++ {
+				i := x + (y * width)
+				red := byte(c[0].Data[i])
+				green := byte(c[1].Data[i])
+				blue := byte(c[2].Data[i])
+				alpha := byte(255)
+				image.Set(x, y, color.NRGBA{red, green, blue, alpha})
+			}
+		}
 	case 4, 5:
 		c := l.Channels
 		for x := 0; x < width; x++ {
@@ -344,6 +354,8 @@ func (l *Layer) GetImage() (image.Image, error) {
 				image.Set(x, y, color.NRGBA{red, green, blue, alpha})
 			}
 		}
+	default:
+		return nil, fmt.Errorf("unsupported number of channels (%v)", l.Channels)
 	}
 	return image, nil
 }
